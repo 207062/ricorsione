@@ -1,43 +1,53 @@
 package it.polito.tdp.ricorsioneEqz;
 
+import java.util.ArrayList;
+import java.util.List;
 
 public class Equazione {
 	private int conta=0;
+	private int somma ;
     
     private int globale;
     private int arraySol[]={0,0,0,0,0};
-    
+    private List<int []> soluzioni ;
+     
   public Equazione(int number){
 	this.globale=number;
+	this.somma=0 ;
+	soluzioni=new ArrayList<int []>() ;
 	//this.arraySol [] ={0,0,0,0,0};
   }
 	public void recursive(int tentativi[],int parametri[],int level){
-	   int somma=0;
 		if(level==parametri.length){
 			if(somma==globale){
-				 for(int i=0;i<arraySol.length;i++){
-					 System.out.println("La soluzione è : "+arraySol[i]);
+				int sol[] = {0,0,0,0,0} ;
+				for(int i=0; i<tentativi.length; i++)
+					sol[i]=tentativi[i] ;
+				soluzioni.add(sol);
+				
+				 System.out.print("La soluzione è : ");
+
+				 for(int i=0;i<tentativi.length;i++){
+					 System.out.print(tentativi[i]+" ");
 					 }
+				 System.out.println();
 			}		 
 			else{
-			 System.out.println("La soluzione proposta non è valida");
+			 //System.out.println("La soluzione proposta non è valida");
 			 return;
 			}
 		}
 		else{
-			 somma=somma+ tentativi[level]*parametri[level];
-		  while(somma<=globale){
-			  arraySol[level]=tentativi[level]; 
-			 if(somma<globale)
-			   recursive(tentativi,parametri,level+1);
-			 
-			 if (somma+arraySol[level]*parametri[level]==globale){
-				 conta++;
-			 }
-			 if(somma+arraySol[level]*parametri[level]>globale){ // --> backtracking
-				somma=somma-arraySol[level]*parametri[level];
-			    arraySol[level]=0;  
-			 }
+			int prova = 0 ;
+		  while(somma+prova*parametri[level]<=globale){
+			  
+			  tentativi[level] = prova ;
+			  somma+=prova*parametri[level] ;
+			  recursive(tentativi, parametri, level+1);
+			  somma-=prova*parametri[level] ;
+
+			  
+		    prova++ ;
 		  }
 		 }
 	
@@ -52,6 +62,7 @@ public class Equazione {
 	 int parametri[]={3,7,12,16,21};
 	 
 	 eqz.recursive(tentativi,parametri,0);
+	 System.out.println();
 		
 	}
 
